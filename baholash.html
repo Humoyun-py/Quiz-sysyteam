@@ -5,144 +5,475 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Baholash tizimi</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 16px;
-            line-height: 1.5;
-            color: #222;
+        :root {
+            --bg1: #eef2ff;
+            --bg2: #fdf2f8;
+            --card: #ffffff;
+            --text: #1e1b4b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #6366f1;
+            --primary-2: #8b5cf6;
+            --primary-dark: #4338ca;
+            --ok: #16a34a;
+            --warn: #d97706;
+            --bad: #dc2626;
+            --shadow: rgba(30, 27, 75, 0.25);
         }
-        h1 {
-            color: #1d3b7a;
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg1: #0f172a;
+                --bg2: #1e1b4b;
+                --card: #1e293b;
+                --text: #e2e8f0;
+                --muted: #94a3b8;
+                --border: #334155;
+                --ok: #4ade80;
+                --warn: #fbbf24;
+                --bad: #f87171;
+                --shadow: rgba(0, 0, 0, 0.6);
+            }
         }
-        .card {
-            background: #f3f7ff;
-            border-left: 4px solid #3b6fd6;
-            padding: 12px 16px;
-            margin-bottom: 16px;
+
+        :root[data-theme="dark"] {
+            --bg1: #0f172a;
+            --bg2: #1e1b4b;
+            --card: #1e293b;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --border: #334155;
+            --ok: #4ade80;
+            --warn: #fbbf24;
+            --bad: #f87171;
+            --shadow: rgba(0, 0, 0, 0.6);
         }
-        label {
-            display: block;
-            margin: 6px 0 2px;
-            font-weight: bold;
-        }
-        input[type="text"] {
-            width: 100%;
-            max-width: 400px;
-            padding: 6px;
+
+        * {
             box-sizing: border-box;
         }
-        table {
-            border-collapse: collapse;
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 28px 16px;
+            font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text);
+            background-color: var(--bg1);
+            background-image:
+                radial-gradient(900px 500px at 10% -10%, rgba(99, 102, 241, 0.25), transparent),
+                radial-gradient(800px 500px at 110% 110%, rgba(236, 72, 153, 0.2), transparent),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+            background-attachment: fixed;
+        }
+
+        .wrap {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+
+        header.top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.7rem;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .subtitle {
+            margin: 4px 0 0;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+            padding: 22px;
+            box-shadow: 0 30px 50px -28px var(--shadow);
+            margin-bottom: 18px;
+        }
+
+        .label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 700;
+        }
+
+        .field {
             width: 100%;
+            max-width: 380px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            border: 2px solid var(--border);
+            background: var(--bg1);
+            color: var(--text);
+            font: inherit;
         }
-        th, td {
-            border: 1px solid #999;
-            padding: 8px;
-            text-align: left;
-            vertical-align: middle;
+
+        .field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
         }
-        th {
-            background: #eee;
+
+        /* Yig‘indi paneli */
+        .summary {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 20px;
+            align-items: center;
+            position: sticky;
+            top: 12px;
+            z-index: 5;
         }
-        td input[type="number"] {
-            width: 80px;
-            padding: 4px;
+
+        .ring {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--primary) calc(var(--p, 0) * 1%), var(--border) 0);
+            box-shadow: 0 16px 26px -12px var(--shadow);
         }
-        .max {
-            white-space: nowrap;
+
+        .ring-inner {
+            width: 96px;
+            height: 96px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            align-content: center;
+            background: var(--card);
             text-align: center;
         }
-        .result {
-            font-size: 1.2em;
-            margin-top: 16px;
+
+        .ring-value {
+            font-size: 1.5rem;
+            font-weight: 800;
         }
-        .grade {
-            font-size: 2em;
-            font-weight: bold;
+
+        .ring-max {
+            font-size: 0.8rem;
+            color: var(--muted);
         }
-        .grade-5 { color: #15803d; }
-        .grade-4 { color: #2563eb; }
-        .grade-3 { color: #b45309; }
-        .grade-2 { color: #b91c1c; }
-        .buttons {
-            margin-top: 16px;
+
+        .grade-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #fff;
+            background: var(--muted);
         }
-        button {
-            padding: 8px 14px;
-            margin-right: 8px;
-            margin-bottom: 8px;
+
+        .grade-5 { background: var(--ok); }
+        .grade-4 { background: #2563eb; }
+        .grade-3 { background: var(--warn); }
+        .grade-2 { background: var(--bad); }
+
+        .summary-text {
+            margin: 8px 0 0;
+            color: var(--muted);
+        }
+
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            padding: 10px 18px;
+            border: 0;
+            border-radius: 12px;
+            font: inherit;
+            font-weight: 700;
+            color: #fff;
             cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            box-shadow: 0 5px 0 var(--primary-dark), 0 12px 20px -10px var(--shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
         }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--primary-dark);
+        }
+
+        .btn.ghost {
+            background: var(--bg1);
+            color: var(--text);
+            border: 1px solid var(--border);
+            box-shadow: none;
+        }
+
+        .btn.ghost:active {
+            transform: none;
+        }
+
+        /* Mezonlar ro‘yxati */
+        .criteria {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 12px;
+        }
+
+        .item {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 16px;
+            display: grid;
+            grid-template-columns: 38px 1fr;
+            gap: 10px 14px;
+            box-shadow: 0 10px 20px -16px var(--shadow);
+        }
+
+        .num {
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        }
+
+        .item-body {
+            min-width: 0;
+        }
+
+        .item-title {
+            margin: 0;
+            font-weight: 600;
+            line-height: 1.4;
+        }
+
+        .chip {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .controls {
+            grid-column: 2;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px 16px;
+        }
+
+        .slider {
+            flex: 1 1 180px;
+            accent-color: var(--primary);
+        }
+
+        .score {
+            width: 84px;
+            padding: 8px 10px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            background: var(--bg1);
+            color: var(--text);
+            font: inherit;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .score:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .penalty {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            color: var(--muted);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .penalty input {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--bad);
+        }
+
+        .penalty.on {
+            color: var(--bad);
+            font-weight: 700;
+        }
+
+        .track {
+            grid-column: 1 / -1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            transition: width 0.35s ease, background 0.35s;
+        }
+
+        .scale {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            text-align: center;
+        }
+
+        .scale div {
+            padding: 10px;
+            border-radius: 14px;
+            background: var(--bg1);
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+        }
+
+        .scale strong {
+            display: block;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 640px) {
+            .summary {
+                grid-template-columns: 1fr;
+                justify-items: center;
+                text-align: center;
+                position: static;
+            }
+
+            .actions {
+                justify-content: center;
+            }
+
+            .scale {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .controls {
+                grid-column: 1 / -1;
+            }
+        }
+
         @media print {
-            .buttons, .penalty-col { display: none; }
-        }
-        @media (max-width: 600px) {
             body {
-                padding: 12px;
+                background: #fff;
             }
-            th, td {
-                padding: 6px;
-                font-size: 0.9em;
+
+            .actions, .theme-btn, .penalty, .slider {
+                display: none;
             }
-            td input[type="number"] {
-                width: 60px;
+
+            .summary {
+                position: static;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                transition: none !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <h1>Baholash tizimi</h1>
-    <p>Dasturlash imtihoni (maktab-exem) uchun ballarni kiriting. Jami ball va baho avtomatik hisoblanadi.</p>
+    <main class="wrap">
+        <header class="top">
+            <div>
+                <h1>Baholash tizimi</h1>
+                <p class="subtitle">Dasturlash imtihoni (maktab-exem): ballarni kiriting, jami va baho avtomatik hisoblanadi.</p>
+            </div>
+            <button type="button" class="btn ghost theme-btn" id="themeBtn">Rejim</button>
+        </header>
 
-    <div class="card">
-        <label for="studentName">O‘quvchi ismi</label>
-        <input type="text" id="studentName" placeholder="Masalan: Ali Valiyev">
-    </div>
+        <section class="card">
+            <label class="label" for="studentName">O‘quvchi ismi</label>
+            <input type="text" id="studentName" class="field" placeholder="Masalan: Ali Valiyev">
+        </section>
 
-    <table>
-        <thead>
-            <tr>
-                <th>№</th>
-                <th>Element / talab</th>
-                <th>Maksimal</th>
-                <th>Ball</th>
-                <th class="penalty-col">Jarima (50%)</th>
-            </tr>
-        </thead>
-        <tbody id="criteria"></tbody>
-    </table>
+        <section class="card summary">
+            <div class="ring" id="ring">
+                <div class="ring-inner">
+                    <span class="ring-value" id="total">0</span>
+                    <span class="ring-max">/ <span id="maxTotal">100</span></span>
+                </div>
+            </div>
+            <div>
+                <span class="grade-badge" id="grade">—</span>
+                <p class="summary-text" id="gradeText">Ballar kiritilmagan</p>
+                <div class="actions">
+                    <button type="button" class="btn ghost" id="resetBtn">Tozalash</button>
+                    <button type="button" class="btn" id="printBtn">Chop etish</button>
+                </div>
+            </div>
+        </section>
 
-    <div class="result">
-        <p>Jami ball: <strong id="total">0</strong> / <span id="maxTotal">100</span></p>
-        <p>Baho: <span id="grade" class="grade">—</span></p>
-        <p id="gradeText"></p>
-    </div>
+        <ol class="criteria" id="criteria"></ol>
 
-    <div class="buttons">
-        <button type="button" id="resetBtn">Tozalash</button>
-        <button type="button" id="printBtn">Chop etish</button>
-    </div>
+        <section class="card" style="margin-top: 18px;">
+            <div class="scale">
+                <div><strong>5</strong>90 – 100 ball, a‘lo</div>
+                <div><strong>4</strong>75 – 89 ball, yaxshi</div>
+                <div><strong>3</strong>60 – 74 ball, qoniqarli</div>
+                <div><strong>2</strong>0 – 59 ball, qoniqarsiz</div>
+            </div>
+        </section>
+    </main>
 
     <script>
         const STORAGE_KEY = 'baholash-maktab-exem';
+        const THEME_KEY = 'baholash-theme';
 
         const criteria = [
-            { name: 'Hujjat tuzilmasi (DOCTYPE, lang, charset, viewport, title)', max: 5 },
-            { name: 'Sarlavhalar: h1, h2, h3, h4, h5, h6 (har biridan kamida 1 ta)', max: 10 },
-            { name: 'Matn elementlari: p (3 ta), br (2 ta), hr (1 ta)', max: 10 },
-            { name: 'Formatlash: mark, sup, sub, del, i, b, em, strong', max: 15 },
-            { name: 'Rasm: img (kamida 2 ta, alt bilan)', max: 5 },
-            { name: 'Tartiblanmagan ro‘yxat: ul va li (kamida 3 ta)', max: 5 },
-            { name: 'Tartiblangan ro‘yxat: ol va li (kamida 3 ta)', max: 5 },
-            { name: 'Local link (href="#...")', max: 5 },
-            { name: 'Global link (href="https://...")', max: 5 },
-            { name: 'Qo‘shimcha ikkinchi sahifa va menyu orqali o‘tish', max: 10 },
-            { name: 'YouTube video (iframe, embed)', max: 10 },
-            { name: 'Google Maps xaritasi (iframe, embed)', max: 10 },
-            { name: 'Kod sifati: indentatsiya, izohlar, xatosiz ishlashi', max: 5 }
+            { name: 'Hujjat tuzilmasi va W3C Validator’dan xatosiz o‘tishi', max: 10 },
+            { name: 'Sarlavhalar: h1 — bitta, h2–h6 ierarxiya bo‘yicha', max: 10 },
+            { name: 'Mavzu va matn hajmi: Samarqand, kamida 250 so‘z', max: 10 },
+            { name: 'Matn elementlari: p (kamida 3), br (kamida 2), hr (kamida 2)', max: 5 },
+            { name: 'Formatlash: mark, sup, sub, del, i, b, em, strong — ma’noli', max: 15 },
+            { name: 'Ro‘yxatlar: ul, ol, li — ichma-ich tuzilma, kamida 3 ta li', max: 10 },
+            { name: 'Local linklar: menyuda kamida 3 ta, har bo‘limda “Yuqoriga qaytish”', max: 10 },
+            { name: 'Global linklar: kamida 2 ta, target="_blank" va rel bilan', max: 5 },
+            { name: 'Rasmlar: kamida 3 ta, mazmunli alt bilan', max: 5 },
+            { name: 'YouTube video iframe: title va allowfullscreen', max: 5 },
+            { name: 'Google Maps iframe: title va loading="lazy"', max: 5 },
+            { name: 'Bo‘limlar: kamida 3 ta section va ularning id atributlari', max: 5 },
+            { name: 'Kod sifati: kamida 4 ta izoh, to‘g‘ri indentatsiya', max: 5 }
         ];
 
         const gradeScale = [
@@ -152,64 +483,96 @@
             { min: 0, grade: 2, text: 'qoniqarsiz' }
         ];
 
-        const tbody = document.getElementById('criteria');
+        const list = document.getElementById('criteria');
         const nameInput = document.getElementById('studentName');
         const totalEl = document.getElementById('total');
         const maxTotalEl = document.getElementById('maxTotal');
         const gradeEl = document.getElementById('grade');
         const gradeTextEl = document.getElementById('gradeText');
+        const ringEl = document.getElementById('ring');
+        const themeBtn = document.getElementById('themeBtn');
 
-        maxTotalEl.textContent = criteria.reduce((sum, c) => sum + c.max, 0);
+        const maxTotal = criteria.reduce((sum, c) => sum + c.max, 0);
+        maxTotalEl.textContent = maxTotal;
 
+        // Har bir mezon uchun karta yaratamiz
         criteria.forEach((c, i) => {
-            const tr = document.createElement('tr');
+            const li = document.createElement('li');
+            li.className = 'item';
 
-            const num = document.createElement('td');
+            const num = document.createElement('div');
+            num.className = 'num';
             num.textContent = i + 1;
 
-            const name = document.createElement('td');
-            name.textContent = c.name;
+            const body = document.createElement('div');
+            body.className = 'item-body';
+            const title = document.createElement('p');
+            title.className = 'item-title';
+            title.textContent = c.name;
+            const chip = document.createElement('span');
+            chip.className = 'chip';
+            chip.textContent = 'Maksimal: ' + c.max;
+            body.append(title, chip);
 
-            const max = document.createElement('td');
-            max.className = 'max';
-            max.textContent = c.max;
+            const controls = document.createElement('div');
+            controls.className = 'controls';
 
-            const scoreCell = document.createElement('td');
+            const slider = document.createElement('input');
+            slider.type = 'range';
+            slider.min = 0;
+            slider.max = c.max;
+            slider.step = 0.5;
+            slider.value = 0;
+            slider.className = 'slider';
+            slider.dataset.index = i;
+            slider.setAttribute('aria-label', c.name);
+
             const score = document.createElement('input');
             score.type = 'number';
             score.min = 0;
             score.max = c.max;
             score.step = 0.5;
             score.value = 0;
+            score.className = 'score';
             score.dataset.index = i;
-            score.setAttribute('aria-label', c.name);
-            scoreCell.appendChild(score);
+            score.setAttribute('aria-label', 'Ball: ' + c.name);
 
-            const penaltyCell = document.createElement('td');
-            penaltyCell.className = 'penalty-col';
+            const penaltyLabel = document.createElement('label');
+            penaltyLabel.className = 'penalty';
             const penalty = document.createElement('input');
             penalty.type = 'checkbox';
             penalty.dataset.index = i;
-            penalty.setAttribute('aria-label', 'Jarima: ' + c.name);
-            penaltyCell.appendChild(penalty);
+            penaltyLabel.append(penalty, document.createTextNode('Jarima (50%)'));
 
-            tr.append(num, name, max, scoreCell, penaltyCell);
-            tbody.appendChild(tr);
+            controls.append(slider, score, penaltyLabel);
+
+            const track = document.createElement('div');
+            track.className = 'track';
+            const fill = document.createElement('div');
+            fill.className = 'fill';
+            fill.dataset.index = i;
+            track.appendChild(fill);
+
+            li.append(num, body, controls, track);
+            list.appendChild(li);
         });
 
-        function clampScore(input) {
-            const max = criteria[input.dataset.index].max;
+        function field(selector, i) {
+            return list.querySelector(selector + '[data-index="' + i + '"]');
+        }
+
+        function clampScore(i) {
+            const max = criteria[i].max;
+            const input = field('input.score', i);
             let value = parseFloat(input.value);
             if (isNaN(value) || value < 0) value = 0;
             if (value > max) value = max;
-            input.value = value;
             return value;
         }
 
         function getRowScore(i) {
-            const input = tbody.querySelector('input[type="number"][data-index="' + i + '"]');
-            const penalty = tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]');
-            const value = clampScore(input);
+            const value = clampScore(i);
+            const penalty = field('input[type="checkbox"]', i);
             return penalty.checked ? value / 2 : value;
         }
 
@@ -219,24 +582,40 @@
 
         function update() {
             let total = 0;
-            criteria.forEach((_, i) => {
-                total += getRowScore(i);
+            criteria.forEach((c, i) => {
+                const value = clampScore(i);
+                // Qiymatni ruxsat etilgan oraliqqa keltirib, ikkala maydonni ham yangilaymiz
+                field('input.score', i).value = value;
+                field('input[type="range"]', i).value = value;
+
+                const penalty = field('input[type="checkbox"]', i);
+                penalty.parentElement.classList.toggle('on', penalty.checked);
+
+                const rowScore = getRowScore(i);
+                total += rowScore;
+
+                const fill = list.querySelector('.fill[data-index="' + i + '"]');
+                fill.style.width = (rowScore / c.max * 100) + '%';
+                fill.style.background = penalty.checked
+                    ? 'linear-gradient(90deg, var(--bad), #f97316)'
+                    : 'linear-gradient(90deg, var(--primary), var(--primary-2))';
             });
             total = Math.round(total * 10) / 10;
 
             const g = getGrade(total);
             totalEl.textContent = total;
-            gradeEl.textContent = g.grade;
-            gradeEl.className = 'grade grade-' + g.grade;
-            gradeTextEl.textContent = 'Baho: ' + g.grade + ' (' + g.text + ')';
+            ringEl.style.setProperty('--p', (total / maxTotal * 100));
+            gradeEl.textContent = g.grade + ' (' + g.text + ')';
+            gradeEl.className = 'grade-badge grade-' + g.grade;
+            gradeTextEl.textContent = 'Jami ' + total + ' / ' + maxTotal + ' ball';
         }
 
         function save() {
             try {
                 const data = {
                     name: nameInput.value,
-                    scores: criteria.map((_, i) => tbody.querySelector('input[type="number"][data-index="' + i + '"]').value),
-                    penalties: criteria.map((_, i) => tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]').checked)
+                    scores: criteria.map((_, i) => field('input.score', i).value),
+                    penalties: criteria.map((_, i) => field('input[type="checkbox"]', i).checked)
                 };
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
             } catch (e) {
@@ -252,10 +631,10 @@
                 nameInput.value = data.name || '';
                 criteria.forEach((_, i) => {
                     if (data.scores && data.scores[i] !== undefined) {
-                        tbody.querySelector('input[type="number"][data-index="' + i + '"]').value = data.scores[i];
+                        field('input.score', i).value = data.scores[i];
                     }
                     if (data.penalties && data.penalties[i] !== undefined) {
-                        tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]').checked = data.penalties[i];
+                        field('input[type="checkbox"]', i).checked = data.penalties[i];
                     }
                 });
             } catch (e) {
@@ -263,12 +642,20 @@
             }
         }
 
-        tbody.addEventListener('input', () => {
+        // Range va number maydonlari bir-birini yangilaydi
+        list.addEventListener('input', e => {
+            const i = e.target.dataset.index;
+            if (i === undefined) return;
+            if (e.target.type === 'range') {
+                field('input.score', i).value = e.target.value;
+            } else if (e.target.classList.contains('score')) {
+                field('input[type="range"]', i).value = e.target.value;
+            }
             update();
             save();
         });
 
-        tbody.addEventListener('change', () => {
+        list.addEventListener('change', () => {
             update();
             save();
         });
@@ -278,13 +665,43 @@
         document.getElementById('resetBtn').addEventListener('click', () => {
             if (!confirm('Barcha ballar tozalansinmi?')) return;
             nameInput.value = '';
-            tbody.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
-            tbody.querySelectorAll('input[type="checkbox"]').forEach(input => input.checked = false);
+            criteria.forEach((_, i) => {
+                field('input.score', i).value = 0;
+                field('input[type="range"]', i).value = 0;
+                field('input[type="checkbox"]', i).checked = false;
+            });
             update();
             save();
         });
 
         document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+        // Mavzu tanlovi (yorug‘/qorong‘i)
+        function applyTheme(theme) {
+            if (theme) {
+                document.documentElement.dataset.theme = theme;
+            } else {
+                delete document.documentElement.dataset.theme;
+            }
+        }
+
+        try {
+            applyTheme(localStorage.getItem(THEME_KEY));
+        } catch (e) {
+            // Saqlangan mavzu o‘qilmasa, tizim sozlamasi ishlatiladi
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const current = document.documentElement.dataset.theme || (dark ? 'dark' : 'light');
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try {
+                localStorage.setItem(THEME_KEY, next);
+            } catch (e) {
+                // Saqlash imkoni bo‘lmasa, faqat joriy sahifada ishlaydi
+            }
+        });
 
         load();
         update();

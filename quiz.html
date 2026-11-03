@@ -455,6 +455,23 @@
             }
         }
 
+        .theme-btn {
+            padding: 8px 14px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .top-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 animation: none !important;
@@ -468,7 +485,10 @@
     <main class="wrap">
         <header class="top">
             <h1>HTML quiz</h1>
-            <span id="counter"></span>
+            <div class="top-right">
+                <span id="counter"></span>
+                <button type="button" class="theme-btn" id="themeBtn">Rejim</button>
+            </div>
         </header>
 
         <div class="progress">
@@ -482,174 +502,6 @@
 
     <script>
         const questions = [
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Hujjat boshida qaysi satr yoziladi?",
-                "options": [
-                        "<html>",
-                        "<!DOCTYPE html>",
-                        "<head>",
-                        "<body>"
-                ],
-                "answer": 1,
-                "explain": "DOCTYPE brauzerga hujjat HTML5 ekanini bildiradi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Sahifa tilini qaysi atribut bilan ko‘rsatamiz?",
-                "options": [
-                        "<html charset>",
-                        "<html lang=\"uz\">",
-                        "<meta lang>",
-                        "<body language>"
-                ],
-                "answer": 1,
-                "explain": "lang atributi html tegiga yoziladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Belgilar kodirovkasini qaysi meta teg bilan beramiz?",
-                "options": [
-                        "<meta charset=\"UTF-8\">",
-                        "<meta name=\"charset\">",
-                        "<charset utf8>",
-                        "<meta encoding>"
-                ],
-                "answer": 0,
-                "explain": "meta charset=\"UTF-8\" kodirovkani belgilaydi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Brauzer yorlig‘ida ko‘rinadigan sarlavha qaysi teg ichida yoziladi?",
-                "options": [
-                        "<head>",
-                        "<title>",
-                        "<h1>",
-                        "<name>"
-                ],
-                "answer": 1,
-                "explain": "title head ichida yoziladi va yorliqda ko‘rinadi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "HTML kodda izoh qanday yoziladi?",
-                "options": [
-                        "// izoh",
-                        "# izoh",
-                        "<!-- izoh -->",
-                        "/* izoh */"
-                ],
-                "answer": 2,
-                "explain": "HTML izohi <!-- --> ichida yoziladi. /* */ CSS da ishlatiladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "meta viewport nima uchun kerak?",
-                "options": [
-                        "Rangni o‘zgartiradi",
-                        "Mobil qurilmada sahifa kengligini moslaydi",
-                        "Rasmni yuklaydi",
-                        "Sahifani yopadi"
-                ],
-                "answer": 1,
-                "explain": "viewport sahifani telefon ekraniga moslaydi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Hujjatning ildiz (asosiy) tegi qaysi?",
-                "options": [
-                        "<body>",
-                        "<html>",
-                        "<head>",
-                        "<main>"
-                ],
-                "answer": 1,
-                "explain": "Barcha kontent html tegi ichida bo‘ladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Ko‘rinadigan kontent qaysi teg ichida yoziladi?",
-                "options": [
-                        "<head>",
-                        "<meta>",
-                        "<body>",
-                        "<title>"
-                ],
-                "answer": 2,
-                "explain": "Matn, rasm va linklar body ichida bo‘ladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Metama’lumotlar qaysi bo‘limda yoziladi?",
-                "options": [
-                        "<body>",
-                        "<head>",
-                        "<footer>",
-                        "<section>"
-                ],
-                "answer": 1,
-                "explain": "meta, title va boshqa servis ma’lumotlari head ichida."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Eng ko‘p ishlatiladigan kodirovka qaysi?",
-                "options": [
-                        "ASCII",
-                        "UTF-8",
-                        "Windows-1251",
-                        "KOI8"
-                ],
-                "answer": 1,
-                "explain": "UTF-8 o‘zbekcha harflarni ham to‘g‘ri ko‘rsatadi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "HTML fayl kengaytmasi qaysi?",
-                "options": [
-                        ".htm.txt",
-                        ".html",
-                        ".hmtl",
-                        ".web"
-                ],
-                "answer": 1,
-                "explain": "To‘g‘ri kengaytma .html."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Teg nomlari katta-kichik harfga bog‘liqmi?",
-                "options": [
-                        "Har doim farq qiladi",
-                        "Teglar uchun farq qilmaydi",
-                        "Faqat h1 katta harfda",
-                        "Faqat title da"
-                ],
-                "answer": 1,
-                "explain": "Teglar katta-kichik harfga sezgir emas, lekin kichik harfda yozish tavsiya etiladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Ichma-ich teglar qanday yopiladi?",
-                "options": [
-                        "Ochilgan tartibda",
-                        "Teskari tartibda",
-                        "Istalgan tartibda",
-                        "Yopilmaydi"
-                ],
-                "answer": 1,
-                "explain": "Oxirgi ochilgan teg birinchi bo‘lib yopiladi."
-        },
-        {
-                "cat": "Asosiy tuzilma",
-                "question": "Atributlar qayerda yoziladi?",
-                "options": [
-                        "Yopuvchi tegda",
-                        "Ochuvchi tegning ichida",
-                        "Matn ichida",
-                        "Faqat CSS da"
-                ],
-                "answer": 1,
-                "explain": "Atributlar ochuvchi tegda yoziladi: <a href=\"...\">."
-        },
         {
                 "cat": "Sarlavhalar va matn",
                 "question": "Eng katta sarlavha qaysi teg?",
@@ -819,54 +671,6 @@
                 "explain": "Har br satrni uzadi, ikki marta yozilsa bo‘sh qator hosil bo‘ladi."
         },
         {
-                "cat": "Sarlavhalar va matn",
-                "question": "Matnda ketma-ket bo‘sh joylar qanday ko‘rinadi?",
-                "options": [
-                        "Hammasi ko‘rinadi",
-                        "Bitta bo‘sh joyga qisqaradi",
-                        "Har biri alohida qator",
-                        "Ko‘rinmaydi"
-                ],
-                "answer": 1,
-                "explain": "Brauzer ketma-ket bo‘sh joylarni bittaga qisqartiradi."
-        },
-        {
-                "cat": "Sarlavhalar va matn",
-                "question": "Kod matnini ko‘rsatadigan teg qaysi?",
-                "options": [
-                        "code",
-                        "kod",
-                        "text",
-                        "pre-code"
-                ],
-                "answer": 0,
-                "explain": "code — kompyuter kodi uchun teg."
-        },
-        {
-                "cat": "Sarlavhalar va matn",
-                "question": "Qisqa iqtibos (qo‘shtirnoqli) matn uchun qaysi teg?",
-                "options": [
-                        "q",
-                        "quote",
-                        "qq",
-                        "qt"
-                ],
-                "answer": 0,
-                "explain": "q — satr ichidagi iqtibos, brauzer qo‘shtirnoq qo‘shadi."
-        },
-        {
-                "cat": "Sarlavhalar va matn",
-                "question": "Sarlavha va paragraf orasida bo‘sh joy qanday hosil bo‘ladi?",
-                "options": [
-                        "Har bir blok avtomatik ajratiladi",
-                        "Hech qachon",
-                        "Faqat br bilan",
-                        "Faqat hr bilan"
-                ],
-                "answer": 0,
-                "explain": "Blok elementlar brauzerda avtomatik alohida qatorda chiqadi."
-        },
-        {
                 "cat": "Formatlash",
                 "question": "Matnni o‘chirilgan (eskirgan) ko‘rinishda chiziq bilan ko‘rsatadigan teg qaysi?",
                 "options": [
@@ -952,42 +756,6 @@
         },
         {
                 "cat": "Formatlash",
-                "question": "Ins teg nimani bildiradi?",
-                "options": [
-                        "ins",
-                        "new",
-                        "add",
-                        "plus"
-                ],
-                "answer": 0,
-                "explain": "ins — qo‘shilgan matn, odatda tagiga chiziq bilan ko‘rinadi."
-        },
-        {
-                "cat": "Formatlash",
-                "question": "Kichik shrift uchun qaysi teg?",
-                "options": [
-                        "small",
-                        "tiny",
-                        "mini",
-                        "lite"
-                ],
-                "answer": 0,
-                "explain": "small — kichikroq matn uchun."
-        },
-        {
-                "cat": "Formatlash",
-                "question": "Qisqartma (masalan, HTML) uchun qaysi teg?",
-                "options": [
-                        "abbr",
-                        "short",
-                        "ab",
-                        "shortcut"
-                ],
-                "answer": 0,
-                "explain": "abbr — qisqartma, title ichida to‘liq shakli yoziladi."
-        },
-        {
-                "cat": "Formatlash",
                 "question": "<b> va <strong> orasidagi farq nima?",
                 "options": [
                         "Farq yo‘q",
@@ -1033,18 +801,6 @@
                 ],
                 "answer": 1,
                 "explain": "Ikki marta: H va O uchun."
-        },
-        {
-                "cat": "Formatlash",
-                "question": "Ma’no o‘zgartirmasdan matnni ajratish uchun satr ichidagi konteyner qaysi?",
-                "options": [
-                        "span",
-                        "split",
-                        "part",
-                        "sep"
-                ],
-                "answer": 0,
-                "explain": "span — satr ichidagi umumiy konteyner, uslub berish uchun ishlatiladi."
         },
         {
                 "cat": "Ro‘yxatlar",
@@ -1587,31 +1343,7 @@
                 "explain": "allow iframe ichidagi ruxsatlarni belgilaydi."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "Mazmunli bo‘lim (section) yaratadigan teg qaysi?",
-                "options": [
-                        "<div>",
-                        "<section>",
-                        "<area>",
-                        "<block>"
-                ],
-                "answer": 1,
-                "explain": "section mavzuga bog‘liq bo‘lim uchun ishlatiladi."
-        },
-        {
-                "cat": "Bo‘limlar va ID",
-                "question": "section ga id=\"tarix\" berilishi nima uchun kerak?",
-                "options": [
-                        "Rang berish uchun",
-                        "Linkdan o‘sha bo‘limga o‘tish uchun (href=\"#tarix\")",
-                        "Rasm qo‘yish uchun",
-                        "Tilni o‘zgartirish uchun"
-                ],
-                "answer": 1,
-                "explain": "id elementga nom beradi, link shu nom orqali o‘tadi."
-        },
-        {
-                "cat": "Bo‘limlar va ID",
+                "cat": "Sahifa ichidagi o‘tish",
                 "question": "Sahifa boshiga qaytish uchun link qanday yoziladi (h1 da id=\"top\" bo‘lsa)?",
                 "options": [
                         "<a href=\"top\">",
@@ -1623,64 +1355,352 @@
                 "explain": "href=\"#top\" sahifadagi id=\"top\" elementiga o‘tadi."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "article teg nimaga ishlatiladi?",
+                "cat": "Sarlavhalar va matn",
+                "question": "h5 qaysi daraja sarlavhasi?",
                 "options": [
-                        "Mustaqil maqola yoki kontent bloki uchun",
-                        "Rasm uchun",
-                        "Havola uchun",
-                        "Ro‘yxat uchun"
+                        "Beshinchi",
+                        "Birinchi",
+                        "Oltinchi",
+                        "To‘rtinchi"
                 ],
                 "answer": 0,
-                "explain": "article mustaqil ma’noga ega kontent uchun."
+                "explain": "h5 — beshinchi daraja."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "header va footer teglari nimaga?",
+                "cat": "Sarlavhalar va matn",
+                "question": "Sahifada sarlavha uchun qaysi teglar mavjud?",
                 "options": [
-                        "Sahifa yuqori va pastki qismi uchun semantik teglar",
-                        "Rang tegi",
-                        "Shrift tegi",
-                        "Rasm tegi"
+                        "h1–h6",
+                        "h1–h3 bilan cheklangan",
+                        "h7",
+                        "h0"
                 ],
                 "answer": 0,
-                "explain": "header yuqori, footer pastki qism uchun."
+                "explain": "h1 dan h6 gacha olti daraja bor."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "nav teg nimaga ishlatiladi?",
+                "cat": "Sarlavhalar va matn",
+                "question": "p ichiga boshqa p yozish mumkinmi?",
                 "options": [
-                        "Navigatsiya (menyu) linklari uchun",
-                        "Rasm uchun",
-                        "Jadval uchun",
-                        "Izoh uchun"
+                        "Ha, p ichida p yozish mumkin",
+                        "Yo‘q, p ichiga p qo‘yilmaydi",
+                        "Faqat h1 ichida mumkin",
+                        "Faqat img bilan"
+                ],
+                "answer": 1,
+                "explain": "p ichiga boshqa paragraf qo‘yib bo‘lmaydi, brauzer uni ajratib yuboradi."
+        },
+        {
+                "cat": "Sarlavhalar va matn",
+                "question": "hr ko‘pincha qayerda ishlatiladi?",
+                "options": [
+                        "Mavzular yoki bo‘limlar orasida",
+                        "Rasm ichida",
+                        "Havola ichida",
+                        "Ro‘yxat o‘rniga"
                 ],
                 "answer": 0,
-                "explain": "nav asosiy navigatsiya linklarini guruhlaydi."
+                "explain": "hr — mavzular orasini ajratadi."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "id atributi bir sahifada nechta marta bo‘lishi mumkin?",
+                "cat": "Formatlash",
+                "question": "Matnda 1 raqamli izoh (footnote) uchun qaysi teg ishlatiladi?",
                 "options": [
-                        "Har bir id unik bo‘lishi kerak (faqat bir marta)",
+                        "sup",
+                        "sub",
+                        "del",
+                        "em"
+                ],
+                "answer": 0,
+                "explain": "sup — yuqori indeks, izoh raqami uchun ham ishlatiladi."
+        },
+        {
+                "cat": "Formatlash",
+                "question": "X<sub>n<\/sub> ifodada sub nimani bildiradi?",
+                "options": [
+                        "Pastki indeks (masalan, n)",
+                        "Yuqori indeks",
+                        "O‘chirish",
+                        "Qalin matn"
+                ],
+                "answer": 0,
+                "explain": "sub — pastki indeks."
+        },
+        {
+                "cat": "Formatlash",
+                "question": "del tegi ichidagi matn qanday ko‘rinadi?",
+                "options": [
+                        "Chiziq bilan o‘chirilgan ko‘rinadi",
+                        "Qalin bo‘ladi",
+                        "Yashiriladi",
+                        "Rangsiz bo‘ladi"
+                ],
+                "answer": 0,
+                "explain": "del — matnni chiziq bilan ko‘rsatadi."
+        },
+        {
+                "cat": "Formatlash",
+                "question": "strong va em birga ishlatilsa nima bo‘ladi?",
+                "options": [
+                        "Matn ham muhim, ham urg‘uli bo‘ladi",
+                        "Matn o‘chadi",
+                        "Xato chiqadi",
+                        "Faqat rang o‘zgaradi"
+                ],
+                "answer": 0,
+                "explain": "Ikkala teg ham ishlaydi: biri muhimlik, biri urg‘u beradi."
+        },
+        {
+                "cat": "Ro‘yxatlar",
+                "question": "Ro‘yxat ichida ro‘yxat (ichma-ich) qachon kerak?",
+                "options": [
+                        "Ierarxiya (bo‘lim va bandlar) ko‘rsatish uchun",
+                        "Rang berish uchun",
+                        "Havola yaratish uchun",
+                        "Rasm qo‘yish uchun"
+                ],
+                "answer": 0,
+                "explain": "Ichma-ich ro‘yxat bo‘limlar va ularning bandlarini ko‘rsatadi."
+        },
+        {
+                "cat": "Ro‘yxatlar",
+                "question": "ol tegi standart holatda qanday raqamlaydi?",
+                "options": [
+                        "1, 2, 3...",
+                        "A, B, C...",
+                        "I, II, III...",
+                        "• • •"
+                ],
+                "answer": 0,
+                "explain": "ol standart holatda oddiy sonlar bilan raqamlaydi."
+        },
+        {
+                "cat": "Ro‘yxatlar",
+                "question": "li elementi ichida nimalar bo‘lishi mumkin?",
+                "options": [
+                        "Matn, havola, rasm va ichma-ich ro‘yxat",
+                        "Faqat raqam",
+                        "Faqat h1",
+                        "Hech narsa"
+                ],
+                "answer": 0,
+                "explain": "li ichiga turli elementlar joylashtirish mumkin."
+        },
+        {
+                "cat": "Ro‘yxatlar",
+                "question": "ul va ol orasidagi farq nimada?",
+                "options": [
+                        "ul — nuqtali, ol — raqamli ro‘yxat",
+                        "ul — raqamli, ol — nuqtali",
+                        "Farq yo‘q",
+                        "ul faqat rasm uchun"
+                ],
+                "answer": 0,
+                "explain": "ul belgili, ol tartibli ro‘yxat yaratadi."
+        },
+        {
+                "cat": "Ro‘yxatlar",
+                "question": "li elementi qanday yopiladi?",
+                "options": [
+                        "<\/li>",
+                        "<\/item>",
+                        "Yopilmaydi",
+                        "<\/list>"
+                ],
+                "answer": 0,
+                "explain": "li juftlanadigan teg, <\/li> bilan yopiladi."
+        },
+        {
+                "cat": "Rasm",
+                "question": "img ning alt matnida nima yoziladi?",
+                "options": [
+                        "Rasm mazmunini qisqa tavsiflash",
+                        "Sayt nomi",
+                        "Rasm hajmi",
+                        "Havola manzili"
+                ],
+                "answer": 0,
+                "explain": "alt — rasmning mazmunini matnda tasvirlaydi."
+        },
+        {
+                "cat": "Rasm",
+                "question": "Bir nechta rasm ketma-ket yozilsa, ular qanday chiqadi?",
+                "options": [
+                        "Satr ichida, bir qatorda (inline)",
+                        "Har biri alohida qatorda",
+                        "Ko‘rinmaydi",
+                        "Faqat birinchisi"
+                ],
+                "answer": 0,
+                "explain": "img inline element, shuning uchun qatorda ketma-ket chiqadi."
+        },
+        {
+                "cat": "Rasm",
+                "question": "img src qaysi formatda bo‘lishi mumkin?",
+                "options": [
+                        "Nisbiy (images/a.jpg) yoki to‘liq (https://...)",
+                        "Faqat .txt",
+                        "Faqat kompyuter diskida",
+                        "Faqat rasm nomi"
+                ],
+                "answer": 0,
+                "explain": "src ham nisbiy, ham to‘liq manzil bo‘lishi mumkin."
+        },
+        {
+                "cat": "Rasm",
+                "question": "img tegi uchun eng asosiy atribut qaysi?",
+                "options": [
+                        "src",
+                        "href",
+                        "name",
+                        "id"
+                ],
+                "answer": 0,
+                "explain": "src rasm manzilini beradi."
+        },
+        {
+                "cat": "Linklar",
+                "question": "a tegi ichidagi matn bo‘sh bo‘lsa nima bo‘ladi?",
+                "options": [
+                        "Havola ko‘rinmaydi yoki bosib bo‘lmaydi",
+                        "Avtomatik matn chiqadi",
+                        "Sahifa yopiladi",
+                        "Xato chiqadi"
+                ],
+                "answer": 0,
+                "explain": "Bosiladigan matn bo‘lmasa, havolani bosish qiyin bo‘ladi."
+        },
+        {
+                "cat": "Linklar",
+                "question": "target=\"_blank\" havolasi bosilganda asl sahifa qayerda qoladi?",
+                "options": [
+                        "Asl sahifada, yangi yorliq ochiladi",
+                        "Yangi sahifa yopiladi",
+                        "Brauzer o‘chadi",
+                        "Sahifa yangilanadi"
+                ],
+                "answer": 0,
+                "explain": "Yangi sahifa alohida yorliqda ochiladi, asl sahifa o‘zgarmaydi."
+        },
+        {
+                "cat": "Linklar",
+                "question": "Havolani bosganda faylni yuklab olish uchun qaysi atribut?",
+                "options": [
+                        "download",
+                        "save",
+                        "file",
+                        "get"
+                ],
+                "answer": 0,
+                "explain": "download atributi faylni yuklab olishni boshlaydi."
+        },
+        {
+                "cat": "Linklar",
+                "question": "href yo‘q bo‘lsa, a tegi odatda nima qiladi?",
+                "options": [
+                        "Havola sifatida ishlamaydi",
+                        "Har doim sahifani yangilaydi",
+                        "Rasm ko‘rsatadi",
+                        "Matnni qalinlashtiradi"
+                ],
+                "answer": 0,
+                "explain": "href — havolaning manzili, u bo‘lmasa a tegi o‘tish bermaydi."
+        },
+        {
+                "cat": "Linklar",
+                "question": "Havolalarni ro‘yxat ko‘rinishida chiqarish uchun qaysi tuzilma?",
+                "options": [
+                        "ul ichida li ichiga a",
+                        "Faqat a yoziladi",
+                        "h1 ichida a",
+                        "img ichida a"
+                ],
+                "answer": 0,
+                "explain": "ul va li ichida a joylashtirilsa, havolalar ro‘yxat bo‘lib chiqadi."
+        },
+        {
+                "cat": "Iframe (video va xarita)",
+                "question": "YouTube videoni avtomatik boshlash uchun iframe da qaysi ruxsat yoziladi?",
+                "options": [
+                        "allow=\"autoplay\"",
+                        "loading=\"lazy\"",
+                        "title",
+                        "href"
+                ],
+                "answer": 0,
+                "explain": "allow ichida autoplay ruxsati beriladi."
+        },
+        {
+                "cat": "Iframe (video va xarita)",
+                "question": "iframe ichiga boshqa saytning sahifasini joylash mumkinmi?",
+                "options": [
+                        "Ha, lekin ba‘zi saytlar ruxsat bermaydi",
+                        "Yo‘q, hech qachon",
+                        "Faqat rasm bilan",
+                        "Faqat YouTube bilan"
+                ],
+                "answer": 0,
+                "explain": "Ko‘p saytlar iframe ichida ochilishni taqiqlaydi."
+        },
+        {
+                "cat": "Iframe (video va xarita)",
+                "question": "iframe va a orasidagi farq nimada?",
+                "options": [
+                        "iframe — sahifa ichiga joylaydi, a — havola orqali o‘tkazadi",
+                        "Farq yo‘q",
+                        "a — rasm uchun",
+                        "iframe — faqat matn uchun"
+                ],
+                "answer": 0,
+                "explain": "iframe mazmunni sahifa ichida ko‘rsatadi, a esa boshqa manzilga o‘tkazadi."
+        },
+        {
+                "cat": "Iframe (video va xarita)",
+                "question": "Bir sahifada iframe necha marta ishlatilishi mumkin?",
+                "options": [
                         "Istalgancha",
-                        "Ikki marta",
-                        "Faqat section da"
+                        "Faqat bir marta",
+                        "Faqat ikki marta",
+                        "Faqat h1 bilan"
                 ],
                 "answer": 0,
-                "explain": "id sahifada noyob bo‘lishi shart, aks holda link noto‘g‘ri joyga boradi."
+                "explain": "Cheklov yo‘q, lekin ko‘p video sahifani sekinlashtiradi."
         },
         {
-                "cat": "Bo‘limlar va ID",
-                "question": "div teg nimaga?",
+                "cat": "Sahifa ichidagi o‘tish",
+                "question": "Sahifa ichidagi bo‘limga o‘tish linkida qaysi belgi bo‘ladi?",
                 "options": [
-                        "Mazmunga ega bo‘lmagan umumiy blok (guruhlash)",
-                        "Sarlavha",
-                        "Rasm",
-                        "Havola"
+                        "#",
+                        "@",
+                        "/",
+                        "&"
                 ],
                 "answer": 0,
-                "explain": "div — elementlarni guruhlash uchun umumiy blok."
+                "explain": "href=\"#id\" — sahifa ichidagi shu id ga o‘tadi."
+        },
+        {
+                "cat": "Sahifa ichidagi o‘tish",
+                "question": "Bo‘lim nishoni (nomi) qaysi atribut bilan beriladi?",
+                "options": [
+                        "id",
+                        "href",
+                        "src",
+                        "alt"
+                ],
+                "answer": 0,
+                "explain": "id — elementga noyob nom beradi, link shu nomga o‘tadi."
+        },
+        {
+                "cat": "Sahifa ichidagi o‘tish",
+                "question": "Sahifaning pastki qismiga o‘tish uchun link qaysi?",
+                "options": [
+                        "<a href=\"#bottom\">",
+                        "<a href=\"bottom.html\">",
+                        "<a src=\"#\">",
+                        "<a href=\"/\">"
+                ],
+                "answer": 0,
+                "explain": "Pastki qismda id=\"bottom\" bo‘lsa, href=\"#bottom\" o‘sha joyga olib boradi."
         }
 ];
 
@@ -1934,6 +1954,35 @@
                 fills.forEach(([fill, w]) => fill.style.width = w + '%');
             });
         }
+
+        // Mavzu tanlovi (yorug‘/qorong‘i), tanlov brauzerda eslab qolinadi
+        const themeBtn = document.getElementById('themeBtn');
+
+        function applyTheme(theme) {
+            if (theme) {
+                document.documentElement.dataset.theme = theme;
+            } else {
+                delete document.documentElement.dataset.theme;
+            }
+        }
+
+        try {
+            applyTheme(localStorage.getItem('quiz-theme'));
+        } catch (e) {
+            // Saqlangan mavzu o‘qilmasa, tizim sozlamasi ishlatiladi
+        }
+
+        themeBtn.addEventListener('click', () => {
+            const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            const current = document.documentElement.dataset.theme || (dark ? 'dark' : 'light');
+            const next = current === 'dark' ? 'light' : 'dark';
+            applyTheme(next);
+            try {
+                localStorage.setItem('quiz-theme', next);
+            } catch (e) {
+                // Saqlash imkoni bo‘lmasa, faqat joriy sahifada ishlaydi
+            }
+        });
 
         showStart();
     </script>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dasturlash imtihoni</title>
+</head>
+<body>
+
+    <h1>Dasturlash fanidan amaliy imtihon (qiyinlashtirilgan variant)</h1>
+    <p><strong>Mavzu:</strong> Samarqand — qadimiy shahar</p>
+
+    <p><strong>Fan:</strong> Dasturlash (HTML)</p>
+    <p><strong>Qiyinlik darajasi:</strong> Yuqori</p>
+    <p><strong>Vaqt:</strong> 120 daqiqa</p>
+    <p><strong>Topshiriq fayli:</strong> index.html (bitta fayl)</p>
+    <p><strong>Maksimal ball:</strong> 100</p>
+
+    <h2>1. Topshiriq</h2>
+    <p>
+        Berilgan namuna <strong>index.html</strong> asosida <strong>“Samarqand”</strong> mavzusida
+        bitta sahifali veb-sayt yarating. Sayt Samarqand tarixi, diqqatga sazovor joylari va
+        bugungi hayoti haqida bo‘lishi kerak. Matnlarni namunadan ko‘chirmasdan, o‘zingiz yozing.
+    </p>
+
+    <h2>2. Shartlar</h2>
+    <ol>
+        <li>Barcha kod <strong>bitta index.html</strong> faylida bo‘lsin. Tashqi CSS va JavaScript fayllari ishlatilmasin. Uslublar <code>&lt;style&gt;</code> ichida yozilsin, <code>style</code> atributi ishlatilmasin.</li>
+        <li>Hujjat <code>&lt;!DOCTYPE html&gt;</code>, <code>lang</code>, <code>meta charset="UTF-8"</code>, <code>meta viewport</code> va <code>title</code> bilan boshlansin.</li>
+        <li>Sayt matni kamida 250 so‘zdan iborat bo‘lsin.</li>
+        <li>Sahifa boshida <code>id="top"</code> atributli <code>h1</code> bo‘lsin. Menyuda kamida 3 ta local link (<code>href="#..."</code>) bo‘lsin.</li>
+        <li>Sayt kamida 3 ta bo‘limdan (<code>section id="..."</code>) iborat bo‘lsin. Har bir bo‘limning oxirida “Yuqoriga qaytish” linki (<code>href="#top"</code>) bo‘lsin.</li>
+        <li>Kamida 2 ta global link bo‘lsin. Ular <code>target="_blank"</code> va <code>rel="noopener noreferrer"</code> bilan ochilsin.</li>
+        <li>Ro‘yxatlar ichma-ich (nested) bo‘lsin: <code>ul</code> ichida kamida 1 ta <code>ol</code> yoki aksincha.</li>
+        <li>Formatlash elementlari ma’noli ishlatilsin: <code>sup</code> darajada (masalan, 2<sup>10</sup>), <code>sub</code> indeksda (masalan, H<sub>2</sub>O), <code>del</code> eskirgan ma’lumotda, <code>mark</code> muhim jumlada.</li>
+        <li>Kamida 3 ta rasm bo‘lsin. Har bir rasmning <code>alt</code> matni mazmunli bo‘lsin; bo‘sh <code>alt=""</code> qabul qilinmaydi.</li>
+        <li>YouTube video <code>iframe</code>ida <code>title</code> va <code>allowfullscreen</code> bo‘lsin. Google Maps <code>iframe</code>ida <code>title</code> va <code>loading="lazy"</code> bo‘lsin. Ikkalasi ham Samarqand bilan bog‘liq bo‘lsin.</li>
+        <li>Kodda kamida 4 ta izoh (<code>&lt;!-- --&gt;</code>) va to‘g‘ri indentatsiya bo‘lsin.</li>
+        <li>Sahifa W3C Markup Validator (validator.w3.org) da xatosiz o‘tsin.</li>
+        <li>Yopilmagan teg, ishlamaydigan link yoki iframe bo‘lsa, shu element balli 50% kamaytiriladi.</li>
+    </ol>
+
+    <h2>3. Tavsiya etilgan tuzilma</h2>
+    <ol>
+        <li>Sarlavha (<code>id="top"</code>) va menyu</li>
+        <li>Kirish bo‘limi (<code>section id="kirish"</code>)</li>
+        <li>Tarix bo‘limi (<code>section id="tarix"</code>): ichma-ich ro‘yxat bilan</li>
+        <li>Diqqatga sazovor joylar bo‘limi (<code>section id="joylar"</code>): rasmlar va YouTube video</li>
+        <li>Xarita va manbalar bo‘limi: Google Maps va global linklar</li>
+        <li>Pastki qism: “Yuqoriga qaytish” linki</li>
+    </ol>
+
+    <h2>4. Majburiy elementlar va baholash mezoni</h2>
+    <ol>
+        <li>Hujjat tuzilmasi va W3C Validator’dan xatosiz o‘tishi — <strong>10 ball</strong></li>
+        <li>Sarlavhalar: <code>h1</code> — bitta, <code>h2</code>–<code>h6</code> — ierarxiya bo‘yicha to‘g‘ri joylashgan — <strong>10 ball</strong></li>
+        <li>Mavzu va matn hajmi: Samarqand mavzusi, kamida 250 so‘z — <strong>10 ball</strong></li>
+        <li>Matn elementlari: <code>p</code> — kamida 3 ta, <code>br</code> — kamida 2 ta, <code>hr</code> — kamida 2 ta — <strong>5 ball</strong></li>
+        <li>Formatlash: <code>mark</code>, <code>sup</code>, <code>sub</code>, <code>del</code>, <code>i</code>, <code>b</code>, <code>em</code>, <code>strong</code> — har biridan kamida 1 ta, ma’noli ishlatilgan — <strong>15 ball</strong></li>
+        <li>Ro‘yxatlar: <code>ul</code>, <code>ol</code> va <code>li</code> — ichma-ich tuzilma, kamida 3 ta <code>li</code> — <strong>10 ball</strong></li>
+        <li>Local linklar: menyuda kamida 3 ta va har bo‘limda “Yuqoriga qaytish” — <strong>10 ball</strong></li>
+        <li>Global linklar: kamida 2 ta, <code>target="_blank"</code> va <code>rel="noopener noreferrer"</code> bilan — <strong>5 ball</strong></li>
+        <li>Rasmlar: kamida 3 ta, mazmunli <code>alt</code> bilan — <strong>5 ball</strong></li>
+        <li>YouTube video <code>iframe</code>: <code>title</code> va <code>allowfullscreen</code> bilan — <strong>5 ball</strong></li>
+        <li>Google Maps <code>iframe</code>: <code>title</code> va <code>loading="lazy"</code> bilan — <strong>5 ball</strong></li>
+        <li>Bo‘limlar: kamida 3 ta <code>section</code> va ularning <code>id</code> atributlari — <strong>5 ball</strong></li>
+        <li>Kod sifati: kamida 4 ta izoh, to‘g‘ri indentatsiya, xatosiz ishlashi — <strong>5 ball</strong></li>
+    </ol>
+    <p><strong>Jami: 100 ball</strong></p>
+
+    <h2>5. Baho qo‘yish</h2>
+    <ul>
+        <li>90 – 100 ball: 5 (a‘lo)</li>
+        <li>75 – 89 ball: 4 (yaxshi)</li>
+        <li>60 – 74 ball: 3 (qoniqarli)</li>
+        <li>0 – 59 ball: 2 (qoniqarsiz)</li>
+    </ul>
+
+    <h2>6. Topshirish tartibi</h2>
+    <ul>
+        <li>Fayl nomi aynan <strong>index.html</strong> bo‘lsin.</li>
+        <li>Faylni brauzerda oching va barcha bo‘limlar, linklar hamda iframe’lar to‘g‘ri ishlashini tekshiring.</li>
+        <li>Topshiriqni imtihon vaqti tugagach o‘qituvchiga topshiring.</li>
+    </ul>
+
+    <p>Omad tilaymiz!</p>
+
+</body>
+</html>

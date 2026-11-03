@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baholash tizimi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+            line-height: 1.5;
+            color: #222;
+        }
+        h1 {
+            color: #1d3b7a;
+        }
+        .card {
+            background: #f3f7ff;
+            border-left: 4px solid #3b6fd6;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+        }
+        label {
+            display: block;
+            margin: 6px 0 2px;
+            font-weight: bold;
+        }
+        input[type="text"] {
+            width: 100%;
+            max-width: 400px;
+            padding: 6px;
+            box-sizing: border-box;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid #999;
+            padding: 8px;
+            text-align: left;
+            vertical-align: middle;
+        }
+        th {
+            background: #eee;
+        }
+        td input[type="number"] {
+            width: 80px;
+            padding: 4px;
+        }
+        .max {
+            white-space: nowrap;
+            text-align: center;
+        }
+        .result {
+            font-size: 1.2em;
+            margin-top: 16px;
+        }
+        .grade {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .grade-5 { color: #15803d; }
+        .grade-4 { color: #2563eb; }
+        .grade-3 { color: #b45309; }
+        .grade-2 { color: #b91c1c; }
+        .buttons {
+            margin-top: 16px;
+        }
+        button {
+            padding: 8px 14px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        @media print {
+            .buttons, .penalty-col { display: none; }
+        }
+        @media (max-width: 600px) {
+            body {
+                padding: 12px;
+            }
+            th, td {
+                padding: 6px;
+                font-size: 0.9em;
+            }
+            td input[type="number"] {
+                width: 60px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Baholash tizimi</h1>
+    <p>Dasturlash imtihoni (maktab-exem) uchun ballarni kiriting. Jami ball va baho avtomatik hisoblanadi.</p>
+
+    <div class="card">
+        <label for="studentName">O‘quvchi ismi</label>
+        <input type="text" id="studentName" placeholder="Masalan: Ali Valiyev">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Element / talab</th>
+                <th>Maksimal</th>
+                <th>Ball</th>
+                <th class="penalty-col">Jarima (50%)</th>
+            </tr>
+        </thead>
+        <tbody id="criteria"></tbody>
+    </table>
+
+    <div class="result">
+        <p>Jami ball: <strong id="total">0</strong> / <span id="maxTotal">100</span></p>
+        <p>Baho: <span id="grade" class="grade">—</span></p>
+        <p id="gradeText"></p>
+    </div>
+
+    <div class="buttons">
+        <button type="button" id="resetBtn">Tozalash</button>
+        <button type="button" id="printBtn">Chop etish</button>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'baholash-maktab-exem';
+
+        const criteria = [
+            { name: 'Hujjat tuzilmasi (DOCTYPE, lang, charset, viewport, title)', max: 5 },
+            { name: 'Sarlavhalar: h1, h2, h3, h4, h5, h6 (har biridan kamida 1 ta)', max: 10 },
+            { name: 'Matn elementlari: p (3 ta), br (2 ta), hr (1 ta)', max: 10 },
+            { name: 'Formatlash: mark, sup, sub, del, i, b, em, strong', max: 15 },
+            { name: 'Rasm: img (kamida 2 ta, alt bilan)', max: 5 },
+            { name: 'Tartiblanmagan ro‘yxat: ul va li (kamida 3 ta)', max: 5 },
+            { name: 'Tartiblangan ro‘yxat: ol va li (kamida 3 ta)', max: 5 },
+            { name: 'Local link (href="#...")', max: 5 },
+            { name: 'Global link (href="https://...")', max: 5 },
+            { name: 'Qo‘shimcha ikkinchi sahifa va menyu orqali o‘tish', max: 10 },
+            { name: 'YouTube video (iframe, embed)', max: 10 },
+            { name: 'Google Maps xaritasi (iframe, embed)', max: 10 },
+            { name: 'Kod sifati: indentatsiya, izohlar, xatosiz ishlashi', max: 5 }
+        ];
+
+        const gradeScale = [
+            { min: 90, grade: 5, text: 'a‘lo' },
+            { min: 75, grade: 4, text: 'yaxshi' },
+            { min: 60, grade: 3, text: 'qoniqarli' },
+            { min: 0, grade: 2, text: 'qoniqarsiz' }
+        ];
+
+        const tbody = document.getElementById('criteria');
+        const nameInput = document.getElementById('studentName');
+        const totalEl = document.getElementById('total');
+        const maxTotalEl = document.getElementById('maxTotal');
+        const gradeEl = document.getElementById('grade');
+        const gradeTextEl = document.getElementById('gradeText');
+
+        maxTotalEl.textContent = criteria.reduce((sum, c) => sum + c.max, 0);
+
+        criteria.forEach((c, i) => {
+            const tr = document.createElement('tr');
+
+            const num = document.createElement('td');
+            num.textContent = i + 1;
+
+            const name = document.createElement('td');
+            name.textContent = c.name;
+
+            const max = document.createElement('td');
+            max.className = 'max';
+            max.textContent = c.max;
+
+            const scoreCell = document.createElement('td');
+            const score = document.createElement('input');
+            score.type = 'number';
+            score.min = 0;
+            score.max = c.max;
+            score.step = 0.5;
+            score.value = 0;
+            score.dataset.index = i;
+            score.setAttribute('aria-label', c.name);
+            scoreCell.appendChild(score);
+
+            const penaltyCell = document.createElement('td');
+            penaltyCell.className = 'penalty-col';
+            const penalty = document.createElement('input');
+            penalty.type = 'checkbox';
+            penalty.dataset.index = i;
+            penalty.setAttribute('aria-label', 'Jarima: ' + c.name);
+            penaltyCell.appendChild(penalty);
+
+            tr.append(num, name, max, scoreCell, penaltyCell);
+            tbody.appendChild(tr);
+        });
+
+        function clampScore(input) {
+            const max = criteria[input.dataset.index].max;
+            let value = parseFloat(input.value);
+            if (isNaN(value) || value < 0) value = 0;
+            if (value > max) value = max;
+            input.value = value;
+            return value;
+        }
+
+        function getRowScore(i) {
+            const input = tbody.querySelector('input[type="number"][data-index="' + i + '"]');
+            const penalty = tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]');
+            const value = clampScore(input);
+            return penalty.checked ? value / 2 : value;
+        }
+
+        function getGrade(total) {
+            return gradeScale.find(g => total >= g.min);
+        }
+
+        function update() {
+            let total = 0;
+            criteria.forEach((_, i) => {
+                total += getRowScore(i);
+            });
+            total = Math.round(total * 10) / 10;
+
+            const g = getGrade(total);
+            totalEl.textContent = total;
+            gradeEl.textContent = g.grade;
+            gradeEl.className = 'grade grade-' + g.grade;
+            gradeTextEl.textContent = 'Baho: ' + g.grade + ' (' + g.text + ')';
+        }
+
+        function save() {
+            try {
+                const data = {
+                    name: nameInput.value,
+                    scores: criteria.map((_, i) => tbody.querySelector('input[type="number"][data-index="' + i + '"]').value),
+                    penalties: criteria.map((_, i) => tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]').checked)
+                };
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            } catch (e) {
+                // Brauzer saqlashga ruxsat bermasa, sahifa baribir ishlaydi
+            }
+        }
+
+        function load() {
+            try {
+                const raw = localStorage.getItem(STORAGE_KEY);
+                if (!raw) return;
+                const data = JSON.parse(raw);
+                nameInput.value = data.name || '';
+                criteria.forEach((_, i) => {
+                    if (data.scores && data.scores[i] !== undefined) {
+                        tbody.querySelector('input[type="number"][data-index="' + i + '"]').value = data.scores[i];
+                    }
+                    if (data.penalties && data.penalties[i] !== undefined) {
+                        tbody.querySelector('input[type="checkbox"][data-index="' + i + '"]').checked = data.penalties[i];
+                    }
+                });
+            } catch (e) {
+                // Saqlangan ma’lumot o‘qilmasa, bo‘sh holatda davom etadi
+            }
+        }
+
+        tbody.addEventListener('input', () => {
+            update();
+            save();
+        });
+
+        tbody.addEventListener('change', () => {
+            update();
+            save();
+        });
+
+        nameInput.addEventListener('input', save);
+
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            if (!confirm('Barcha ballar tozalansinmi?')) return;
+            nameInput.value = '';
+            tbody.querySelectorAll('input[type="number"]').forEach(input => input.value = 0);
+            tbody.querySelectorAll('input[type="checkbox"]').forEach(input => input.checked = false);
+            update();
+            save();
+        });
+
+        document.getElementById('printBtn').addEventListener('click', () => window.print());
+
+        load();
+        update();
+    </script>
+
+</body>
+</html>

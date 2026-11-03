@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTML quiz</title>
+    <style>
+        :root {
+            --bg1: #eef2ff;
+            --bg2: #fdf2f8;
+            --card: #ffffff;
+            --text: #1e1b4b;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --primary: #6366f1;
+            --primary-2: #8b5cf6;
+            --primary-dark: #4338ca;
+            --ok: #16a34a;
+            --ok-bg: #dcfce7;
+            --bad: #dc2626;
+            --bad-bg: #fee2e2;
+            --shadow: rgba(30, 27, 75, 0.25);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root:not([data-theme="light"]) {
+                --bg1: #0f172a;
+                --bg2: #1e1b4b;
+                --card: #1e293b;
+                --text: #e2e8f0;
+                --muted: #94a3b8;
+                --border: #334155;
+                --ok: #4ade80;
+                --ok-bg: #14532d;
+                --bad: #f87171;
+                --bad-bg: #7f1d1d;
+                --shadow: rgba(0, 0, 0, 0.6);
+            }
+        }
+
+        :root[data-theme="dark"] {
+            --bg1: #0f172a;
+            --bg2: #1e1b4b;
+            --card: #1e293b;
+            --text: #e2e8f0;
+            --muted: #94a3b8;
+            --border: #334155;
+            --ok: #4ade80;
+            --ok-bg: #14532d;
+            --bad: #f87171;
+            --bad-bg: #7f1d1d;
+            --shadow: rgba(0, 0, 0, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            padding: 28px 16px;
+            font-family: system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+            color: var(--text);
+            background-color: var(--bg1);
+            background-image:
+                radial-gradient(900px 500px at 10% -10%, rgba(99, 102, 241, 0.25), transparent),
+                radial-gradient(800px 500px at 110% 110%, rgba(236, 72, 153, 0.2), transparent),
+                linear-gradient(135deg, var(--bg1), var(--bg2));
+            background-attachment: fixed;
+        }
+
+        .wrap {
+            width: 100%;
+            max-width: 680px;
+        }
+
+        header.top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.7rem;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        #counter {
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .progress {
+            height: 10px;
+            background: var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        #bar {
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            box-shadow: 0 0 12px rgba(139, 92, 246, 0.6);
+            transition: width 0.5s ease;
+        }
+
+        .stage {
+            perspective: 1200px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 28px;
+            transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg));
+            transform-style: preserve-3d;
+            transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+            box-shadow:
+                0 40px 60px -28px var(--shadow),
+                0 18px 30px -18px rgba(99, 102, 241, 0.35);
+            animation: rise 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) backwards;
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: -1;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.35), transparent 40%);
+            pointer-events: none;
+        }
+
+        @keyframes rise {
+            from {
+                opacity: 0;
+                transform: perspective(1200px) rotateX(16deg) translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: perspective(1200px) rotateX(0) translateY(0);
+            }
+        }
+
+        .screen {
+            animation: slide 0.45s ease backwards;
+        }
+
+        @keyframes slide {
+            from {
+                opacity: 0;
+                transform: translateX(24px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero h2 {
+            margin: 0 0 8px;
+            font-size: 1.5rem;
+        }
+
+        .muted {
+            color: var(--muted);
+        }
+
+        .label {
+            display: block;
+            margin: 16px 0 6px;
+            font-weight: 700;
+        }
+
+        .field {
+            width: 100%;
+            padding: 13px 14px;
+            border-radius: 14px;
+            border: 2px solid var(--border);
+            background: var(--bg1);
+            color: var(--text);
+            font: inherit;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.25);
+        }
+
+        .btn {
+            margin-top: 18px;
+            padding: 12px 24px;
+            border: 0;
+            border-radius: 14px;
+            font: inherit;
+            font-weight: 700;
+            color: #fff;
+            cursor: pointer;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            box-shadow: 0 6px 0 var(--primary-dark), 0 14px 24px -10px var(--shadow);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 var(--primary-dark);
+        }
+
+        .chip {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.12);
+        }
+
+        .question-text {
+            margin: 14px 0 0;
+            font-size: 1.22rem;
+            font-weight: 700;
+            line-height: 1.45;
+        }
+
+        .options {
+            display: grid;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: var(--card);
+            color: var(--text);
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+            box-shadow: 0 6px 0 var(--border);
+            transition: transform 0.12s, box-shadow 0.12s, background 0.2s, border-color 0.2s;
+        }
+
+        .option:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 var(--border), 0 14px 22px -10px var(--shadow);
+        }
+
+        .option:active:not(:disabled) {
+            transform: translateY(3px);
+            box-shadow: 0 2px 0 var(--border);
+        }
+
+        .option:disabled {
+            cursor: default;
+        }
+
+        .letter {
+            flex: 0 0 34px;
+            height: 34px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+        }
+
+        .option.correct {
+            border-color: var(--ok);
+            background: var(--ok-bg);
+            box-shadow: 0 6px 0 var(--ok);
+        }
+
+        .option.correct .letter {
+            background: var(--ok);
+        }
+
+        .option.wrong {
+            border-color: var(--bad);
+            background: var(--bad-bg);
+            box-shadow: 0 6px 0 var(--bad);
+            animation: shake 0.45s;
+        }
+
+        .option.wrong .letter {
+            background: var(--bad);
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(3px); }
+        }
+
+        .feedback {
+            margin-top: 16px;
+            padding: 12px 14px;
+            border-radius: 14px;
+            font-weight: 700;
+        }
+
+        .feedback.ok {
+            color: var(--ok);
+            background: var(--ok-bg);
+        }
+
+        .feedback.bad {
+            color: var(--bad);
+            background: var(--bad-bg);
+        }
+
+        .explain {
+            margin: 10px 0 0;
+            color: var(--muted);
+        }
+
+        .error {
+            color: var(--bad);
+            font-weight: 700;
+        }
+
+        .result {
+            text-align: center;
+        }
+
+        .ring {
+            width: 170px;
+            height: 170px;
+            margin: 8px auto 4px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: conic-gradient(var(--primary) calc(var(--p, 0) * 1%), var(--border) 0);
+            box-shadow: 0 24px 36px -16px var(--shadow), inset 0 -6px 12px rgba(0, 0, 0, 0.08);
+            transform: translateZ(30px);
+        }
+
+        .ring-inner {
+            width: 136px;
+            height: 136px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            align-content: center;
+            background: var(--card);
+            box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.12);
+        }
+
+        .ring-value {
+            font-size: 2.1rem;
+            font-weight: 800;
+        }
+
+        .grade {
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 8px 0 4px;
+        }
+
+        .grade-5 { color: var(--ok); }
+        .grade-4 { color: #2563eb; }
+        .grade-3 { color: #d97706; }
+        .grade-2 { color: var(--bad); }
+
+        .cats {
+            text-align: left;
+            margin-top: 18px;
+        }
+
+        .cat {
+            margin: 12px 0;
+        }
+
+        .cat-head {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .track {
+            height: 10px;
+            background: var(--border);
+            border-radius: 999px;
+            overflow: hidden;
+        }
+
+        .fill {
+            height: 100%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
+            transition: width 0.8s ease;
+        }
+
+        .wrong-list {
+            text-align: left;
+            margin-top: 18px;
+            padding-left: 20px;
+            color: var(--muted);
+        }
+
+        .wrong-list li {
+            margin: 6px 0;
+        }
+
+        h3 {
+            margin: 18px 0 0;
+            font-size: 1.05rem;
+            text-align: left;
+        }
+
+        @media (max-width: 520px) {
+            .card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .question-text {
+                font-size: 1.08rem;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <main class="wrap">
+        <header class="top">
+            <h1>HTML quiz</h1>
+            <span id="counter"></span>
+        </header>
+
+        <div class="progress">
+            <div id="bar"></div>
+        </div>
+
+        <section class="stage">
+            <div id="app" class="card"></div>
+        </section>
+    </main>
+
+    <script>
+        // Lokal server (quiz_server.py). Supabase ga o‘tish uchun shu ikki qatorni almashtiring
+        // (Project Settings → API dan olinadi).
+        const SUPABASE_URL = 'http://127.0.0.1:8000';
+        const SUPABASE_ANON_KEY = 'local-dev-key';
+
+        const gradeScale = [
+            { min: 90, grade: 5, text: 'a‘lo' },
+            { min: 75, grade: 4, text: 'yaxshi' },
+            { min: 60, grade: 3, text: 'qoniqarli' },
+            { min: 0, grade: 2, text: 'qoniqarsiz' }
+        ];
+
+        const app = document.getElementById('app');
+        const counter = document.getElementById('counter');
+        const bar = document.getElementById('bar');
+
+        let questions = [];
+        let studentName = '';
+        let deck = [];
+        let idx = 0;
+        let wrongList = [];
+        let catStats = {};
+
+        function el(tag, text) {
+            const node = document.createElement(tag);
+            if (text !== undefined) node.textContent = text;
+            return node;
+        }
+
+        function shuffle(arr) {
+            const a = arr.slice();
+            for (let i = a.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [a[i], a[j]] = [a[j], a[i]];
+            }
+            return a;
+        }
+
+        function render(nodes) {
+            app.textContent = '';
+            const screen = el('div');
+            screen.className = 'screen';
+            screen.append(...nodes);
+            app.appendChild(screen);
+            return screen;
+        }
+
+        function setProgress(done, total) {
+            bar.style.width = (total ? (done / total) * 100 : 0) + '%';
+        }
+
+        // 3D burilish: sichqoncha (yoki barmoq) harakatiga qarab karta buriladi
+        const stage = document.querySelector('.stage');
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        if (!reduceMotion) {
+            stage.addEventListener('pointermove', e => {
+                const r = stage.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                app.style.setProperty('--ry', (x * 10) + 'deg');
+                app.style.setProperty('--rx', (-y * 8) + 'deg');
+            });
+
+            stage.addEventListener('pointerleave', () => {
+                app.style.setProperty('--rx', '0deg');
+                app.style.setProperty('--ry', '0deg');
+            });
+        }
+
+        function isConfigured() {
+            return !SUPABASE_URL.includes('YOUR-PROJECT-ID') && !SUPABASE_ANON_KEY.includes('YOUR-ANON-KEY');
+        }
+
+        async function loadQuestions() {
+            const url = SUPABASE_URL + '/rest/v1/quiz_questions?select=category,question,options,answer,explain&order=id.asc';
+            const res = await fetch(url, {
+                headers: {
+                    apikey: SUPABASE_ANON_KEY,
+                    Authorization: 'Bearer ' + SUPABASE_ANON_KEY
+                }
+            });
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+            return data.map(row => ({
+                cat: row.category,
+                question: row.question,
+                options: row.options,
+                answer: row.answer,
+                explain: row.explain
+            }));
+        }
+
+        function showLoading() {
+            counter.textContent = '';
+            setProgress(0, 1);
+            render([el('p', 'Savollar yuklanmoqda...')]).firstChild.className = 'muted';
+        }
+
+        function showError(message) {
+            counter.textContent = '';
+            setProgress(0, 1);
+            const p = el('p', message);
+            p.className = 'error';
+
+            const btn = el('button', 'Qayta urinish');
+            btn.className = 'btn';
+            btn.addEventListener('click', init);
+
+            render([p, btn]);
+        }
+
+        function showStart() {
+            counter.textContent = '';
+            setProgress(0, 1);
+
+            const h2 = el('h2', 'Bilimingizni sinab ko‘ring');
+            const p = el('p', 'Bu test ' + questions.length + ' ta savoldan iborat. Savollar aralash tartibda chiqadi. Har bir savolda bitta to‘g‘ri javob bor.');
+            p.className = 'muted';
+
+            const label = el('label', 'Ismingiz (ixtiyoriy)');
+            label.className = 'label';
+            label.htmlFor = 'name';
+
+            const input = document.createElement('input');
+            input.type = 'text';
+            input.id = 'name';
+            input.className = 'field';
+            input.placeholder = 'Masalan: Ali Valiyev';
+
+            const btn = el('button', 'Testni boshlash');
+            btn.className = 'btn';
+            btn.addEventListener('click', () => {
+                studentName = input.value.trim();
+                deck = shuffle(questions);
+                idx = 0;
+                wrongList = [];
+                catStats = {};
+                showQuestion();
+            });
+
+            const wrap = el('div');
+            wrap.className = 'hero';
+            wrap.append(h2, p, label, input, btn);
+            render([wrap]);
+        }
+
+        function showQuestion() {
+            const q = deck[idx];
+            const options = shuffle(q.options.map((text, i) => ({ text: text, ok: i === q.answer })));
+
+            counter.textContent = (idx + 1) + ' / ' + deck.length;
+            setProgress(idx, deck.length);
+
+            const chip = el('span', q.cat);
+            chip.className = 'chip';
+
+            const title = el('p', q.question);
+            title.className = 'question-text';
+
+            const feedback = el('div');
+            feedback.className = 'feedback';
+            feedback.hidden = true;
+
+            const explain = el('p');
+            explain.className = 'explain';
+            explain.hidden = true;
+
+            const optionsWrap = el('div');
+            optionsWrap.className = 'options';
+
+            const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+            const optionButtons = options.map((opt, i) => {
+                const btn = el('button');
+                btn.className = 'option';
+                const letter = el('span', letters[i] || '•');
+                letter.className = 'letter';
+                const text = el('span', opt.text);
+                btn.append(letter, text);
+
+                btn.addEventListener('click', () => {
+                    optionButtons.forEach(b => b.disabled = true);
+
+                    const stat = catStats[q.cat] || (catStats[q.cat] = { ok: 0, total: 0 });
+                    stat.total++;
+
+                    if (opt.ok) {
+                        btn.classList.add('correct');
+                        stat.ok++;
+                        feedback.textContent = 'To‘g‘ri!';
+                        feedback.className = 'feedback ok';
+                    } else {
+                        btn.classList.add('wrong');
+                        optionButtons[options.findIndex(o => o.ok)].classList.add('correct');
+                        wrongList.push(q);
+                        feedback.textContent = 'Noto‘g‘ri. To‘g‘ri javob: ' + q.options[q.answer];
+                        feedback.className = 'feedback bad';
+                    }
+                    feedback.hidden = false;
+                    explain.textContent = q.explain;
+                    explain.hidden = false;
+
+                    const next = el('button', idx === deck.length - 1 ? 'Natijani ko‘rish' : 'Keyingi savol');
+                    next.className = 'btn';
+                    next.addEventListener('click', () => {
+                        idx++;
+                        if (idx < deck.length) {
+                            showQuestion();
+                        } else {
+                            showResult();
+                        }
+                    });
+                    screen.appendChild(next);
+                });
+                optionsWrap.appendChild(btn);
+                return btn;
+            });
+
+            const screen = render([chip, title, optionsWrap, feedback, explain]);
+        }
+
+        function showResult() {
+            counter.textContent = '';
+            setProgress(1, 1);
+
+            const correctCount = Object.values(catStats).reduce((sum, s) => sum + s.ok, 0);
+            const percent = Math.round(correctCount * 100 / deck.length);
+            const g = gradeScale.find(s => percent >= s.min);
+            const who = studentName ? studentName + ', ' : '';
+
+            const ring = el('div');
+            ring.className = 'ring';
+            ring.style.setProperty('--p', percent);
+            const inner = el('div');
+            inner.className = 'ring-inner';
+            const value = el('span', percent + '%');
+            value.className = 'ring-value';
+            const score = el('span', correctCount + ' / ' + deck.length + ' to‘g‘ri');
+            score.className = 'muted';
+            inner.append(value, score);
+            ring.appendChild(inner);
+
+            const grade = el('div', g.grade + ' (' + g.text + ')');
+            grade.className = 'grade grade-' + g.grade;
+
+            const title = el('p', who + 'natijangiz');
+            title.className = 'question-text';
+
+            const wrapper = el('div');
+            wrapper.className = 'result';
+            wrapper.append(title, ring, grade);
+
+            const cats = el('div');
+            cats.className = 'cats';
+            cats.appendChild(el('h3', 'Bo‘limlar bo‘yicha'));
+
+            const fills = [];
+            Object.keys(catStats).forEach(cat => {
+                const s = catStats[cat];
+                const row = el('div');
+                row.className = 'cat';
+                const head = el('div');
+                head.className = 'cat-head';
+                head.append(el('span', cat), el('span', s.ok + ' / ' + s.total));
+                const track = el('div');
+                track.className = 'track';
+                const fill = el('div');
+                fill.className = 'fill';
+                track.appendChild(fill);
+                row.append(head, track);
+                cats.appendChild(row);
+                fills.push([fill, s.total ? (s.ok / s.total) * 100 : 0]);
+            });
+
+            const nodes = [wrapper, cats];
+
+            if (wrongList.length > 0) {
+                nodes.push(el('h3', 'Xato javoblar'));
+                const wrongUl = document.createElement('ul');
+                wrongUl.className = 'wrong-list';
+                wrongList.forEach(q => {
+                    wrongUl.appendChild(el('li', q.question + ' — to‘g‘ri javob: ' + q.options[q.answer]));
+                });
+                nodes.push(wrongUl);
+            }
+
+            const btn = el('button', 'Qaytadan boshlash');
+            btn.className = 'btn';
+            btn.addEventListener('click', showStart);
+            nodes.push(btn);
+
+            render(nodes);
+
+            // Bo‘lim chiziqlari animatsiya bilan to‘ladi
+            requestAnimationFrame(() => {
+                fills.forEach(([fill, w]) => fill.style.width = w + '%');
+            });
+        }
+
+        async function init() {
+            if (!isConfigured()) {
+                showError('Supabase sozlanmagan: quiz.html ichidagi SUPABASE_URL va SUPABASE_ANON_KEY ni kiriting.');
+                return;
+            }
+
+            showLoading();
+            try {
+                questions = await loadQuestions();
+            } catch (e) {
+                showError('Savollarni yuklab bo‘lmadi (' + e.message + '). Supabase sozlamalari va quiz_questions jadvalini tekshiring.');
+                return;
+            }
+
+            if (questions.length === 0) {
+                showError('Jadvalda savol topilmadi. quiz-supabase.sql faylini Supabase SQL Editor da ishga tushiring.');
+                return;
+            }
+
+            showStart();
+        }
+
+        init();
+    </script>
+
+</body>
+</html>
